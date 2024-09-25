@@ -6,6 +6,10 @@ async function criarUsuario(nome, email, senha) {
   });
 }
 
+async function listarTodosUsuarios() {
+  return await prisma.usuario.findMany(); 
+}
+
 async function recuperarMetricasUsuario(usuarioId) {
   const totalRefeicoes = await prisma.refeicao.count({
     where: { usuarios: { some: { usuarioId } } },
@@ -39,5 +43,6 @@ async function recuperarMetricasUsuario(usuarioId) {
 
 module.exports = {
   criarUsuario,
+  listarTodosUsuarios, 
   recuperarMetricasUsuario,
 };

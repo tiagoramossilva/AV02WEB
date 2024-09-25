@@ -3,10 +3,16 @@ const refeicaoService = require('../services/refeicaoService');
 async function criarRefeicao(req, res) {
   try {
     const { nome, descricao, dateTime, diet, usuarioId } = req.body;
+    console.log('Requisição para criar refeição:', req.body);  
+
     const novaRefeicao = await refeicaoService.criarRefeicao(nome, descricao, dateTime, diet, usuarioId);
+    
+    console.log('Refeição criada:', novaRefeicao); 
+
     res.status(201).json(novaRefeicao);
   } catch (error) {
-    res.status(500).json({ error: 'Erro ao criar refeição' });
+    console.error('Erro ao criar refeição:', error);  
+    res.status(500).json({ error: 'Erro ao criar refeição', details: error.message });
   }
 }
 

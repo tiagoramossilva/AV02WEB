@@ -1,15 +1,28 @@
 const prisma = require('../models/prismaClient');
 
 async function criarRefeicao(nome, descricao, dateTime, diet, usuarioId) {
-  return await prisma.refeicao.create({
-    data: {
-      nome,
-      descricao,
-      dateTime,
-      diet,
-      usuarios: { create: { usuarioId } },
-    },
-  });
+  try {
+    const novaRefeicao = await prisma.refeicao.create({
+      data: {
+        nome,
+        descricao,
+        dateTime,
+        diet,
+      },
+    });
+
+    await prisma.usuarioRefeicao.create({
+      data: {
+        usuarioId,
+        refeicaoId: novaRefeicao.id, 
+      },
+    });
+
+    return novaRefeicao;
+  } catch (error) {
+    console.error('Erro ao criar refeição ou associar usuário:', error);
+    throw error; 
+  }
 }
 
 async function buscarRefeicao(id) {

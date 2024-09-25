@@ -20,7 +20,17 @@ async function recuperarMetricas(req, res) {
   }
 }
 
+async function listarUsuarios(req, res) {
+  try {
+    const usuarios = await userService.listarTodosUsuarios();
+    res.status(200).json(usuarios);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao listar usuários' });
+  }
+}
+
 module.exports = {
   criarUsuario,
   recuperarMetricas,
+  listarUsuarios, 
 };
