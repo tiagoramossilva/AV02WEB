@@ -33,17 +33,31 @@ async function atualizarRefeicao(req, res) {
     const refeicaoAtualizada = await refeicaoService.atualizarRefeicao(id, dadosAtualizados);
     res.status(200).json(refeicaoAtualizada);
   } catch (error) {
-    res.status(500).json({ error: 'Erro ao atualizar refeição' });
+    console.error('Erro ao atualizar refeição:', error); 
+    res.status(500).json({ error: 'Erro ao atualizar refeição', details: error.message }); 
   }
 }
 
 async function deletarRefeicao(req, res) {
   try {
     const { id } = req.params;
-    await refeicaoService.deletarRefeicao(id);
+    console.log(`Tentando deletar a refeição com ID: ${id}`); 
+    const resultado = await refeicaoService.deletarRefeicao(id);
+    console.log('Refeição deletada:', resultado); 
     res.status(204).send();
   } catch (error) {
+    console.error('Erro ao deletar refeição:', error); 
     res.status(500).json({ error: 'Erro ao deletar refeição' });
+  }
+}
+
+async function listarRefeicoes(req, res) {
+  try {
+    const refeicoes = await refeicaoService.listarRefeicoes();
+    res.status(200).json(refeicoes);
+  } catch (error) {
+    console.error('Erro ao listar refeições:', error);
+    res.status(500).json({ error: 'Erro ao listar refeições' });
   }
 }
 
@@ -52,4 +66,5 @@ module.exports = {
   buscarRefeicao,
   atualizarRefeicao,
   deletarRefeicao,
+  listarRefeicoes,
 };

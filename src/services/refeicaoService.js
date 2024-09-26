@@ -34,7 +34,21 @@ async function atualizarRefeicao(id, dadosAtualizados) {
 }
 
 async function deletarRefeicao(id) {
+  const refeicaoExistente = await prisma.refeicao.findUnique({ where: { id } });
+  if (!refeicaoExistente) {
+    throw new Error('Refeição não encontrada');
+  }
+
+  await prisma.usuarioRefeicao.deleteMany({
+    where: { refeicaoId: id }, 
+  });
+
   return await prisma.refeicao.delete({ where: { id } });
+}
+
+
+async function listarRefeicoes() {
+  return await prisma.refeicao.findMany();
 }
 
 module.exports = {
@@ -42,4 +56,5 @@ module.exports = {
   buscarRefeicao,
   atualizarRefeicao,
   deletarRefeicao,
+  listarRefeicoes,
 };
