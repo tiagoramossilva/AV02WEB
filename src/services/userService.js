@@ -1,4 +1,5 @@
-const prisma = require('../models/prismaClient');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 async function criarUsuario(nome, email, senha) {
   return await prisma.usuario.create({
@@ -12,17 +13,17 @@ async function listarTodosUsuarios() {
 
 async function recuperarMetricasUsuario(usuarioId) {
   const totalRefeicoes = await prisma.refeicao.count({
-    where: { usuarios: { some: { usuarioId } } },
+    where: { usuario: { some: { usuarioId } } },
   });
 
   const totalRefeicoesDieta = await prisma.refeicao.count({
-    where: { usuarios: { some: { usuarioId } }, diet: true },
+    where: { usuario: { some: { usuarioId } }, diet: true },
   });
 
   const totalRefeicoesForaDieta = totalRefeicoes - totalRefeicoesDieta;
 
   const refeicoesUsuario = await prisma.refeicao.findMany({
-    where: { usuarios: { some: { usuarioId } } },
+    where: { usuario: { some: { usuarioId } } },
     orderBy: { dateTime: 'asc' },
   });
 

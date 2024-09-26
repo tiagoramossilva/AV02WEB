@@ -16,9 +16,11 @@ async function recuperarMetricas(req, res) {
     const metricas = await userService.recuperarMetricasUsuario(usuarioId);
     res.status(200).json(metricas);
   } catch (error) {
-    res.status(500).json({ error: 'Erro ao recuperar métricas' });
+    console.error('Erro ao recuperar métricas:', error);  
+    res.status(500).json({ error: `Erro ao recuperar métricas: ${error.message}` });
   }
 }
+
 
 async function listarUsuarios(req, res) {
   try {

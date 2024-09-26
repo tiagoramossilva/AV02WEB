@@ -1,4 +1,5 @@
-const prisma = require('../models/prismaClient');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 async function criarRefeicao(nome, descricao, dateTime, diet, usuarioId) {
   try {
@@ -6,7 +7,7 @@ async function criarRefeicao(nome, descricao, dateTime, diet, usuarioId) {
       data: {
         nome,
         descricao,
-        dateTime,
+        dateTime: new Date(dateTime).toISOString(),
         diet,
       },
     });
