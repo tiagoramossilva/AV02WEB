@@ -1,8 +1,10 @@
 const jwt = require('jsonwebtoken');
-const jwtSecret = 'your_jwt_secret';  // Use uma variável de ambiente para um segredo mais seguro
+const jwtSecret = process.env.JWT_SECRET || 'your_jwt_secret';  
 
 function autenticarToken(req, res, next) {
-  const token = req.headers['authorization'];
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];  // Pega apenas o token, sem o "Bearer"
+  
   if (!token) return res.status(403).json({ error: 'Token não fornecido' });
 
   jwt.verify(token, jwtSecret, (err, usuario) => {
